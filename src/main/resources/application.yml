@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: aggregator
+  liquibase:
+    change-log: classpath://db/changelog/changelog.xml
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_URL:localhost:5432/aggregator}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    hikari:
+      schema: ${POSTGRES_SCHEMA:aggregator}
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      pool-name: datasource-pool-aggregator
+    initialization-mode: always
+  jpa:
+    database: postgresql
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+          lob:
+            non_contextual_creation: true
+    generate-ddl: false
+    open-in-view: off
+  task:
+    scheduling:
+      pool:
+        size: 2
+financing-institutions:
+  fast-bank:
+    url: ${FAST_BANK_URL}
+  solid-bank:
+    url: ${SOLID_BANK_URL}

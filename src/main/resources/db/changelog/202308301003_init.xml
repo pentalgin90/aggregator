@@ -1,0 +1,40 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="202308301003" author="Bragin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="customers"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE customers
+            (
+                customer_id         UUID      NOT NULL,
+                first_name          varchar   NOT NULL,
+                last_name           varchar   NOT NULL,
+                email               varchar   NOT NULL,
+                phone_number        varchar   NOT NULL,
+                date_created        timestamp NOT NULL,
+                monthly_income      decimal   NOT NULL,
+                monthly_exoenses    decimal   NOT NULL,
+                married_status      varchar   NOT NULL,
+                dependents          integer   NOT NULL,
+                aggree_to_be_scored boolean,
+                amount              decimal   NOT NULL,
+                PRIMARY KEY (customer_id)
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="202308302105" author="Bragin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="customers"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE customers
+                ADD CONSTRAINT id_email_unq UNIQUE (email);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

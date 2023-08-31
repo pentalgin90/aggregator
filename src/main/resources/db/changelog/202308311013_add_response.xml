@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="202308311013" author="Bragin">
+        <preConditions>
+            <not>
+                <tableExists tableName="responses"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE responses
+            (
+                response_id UUID    NOT NULL,
+                bank        varchar NOT NULL,
+                status      varchar NOT NULL,
+                customer_id UUID    NOT NULL,
+                PRIMARY KEY (response_id)
+            );
+            CREATE TABLE offers
+            (
+                offer_id UUID NOT NULL,
+                monthly_payment_amount decimal NOT NULL,
+                total_repayment_amount decimal NOT NULL,
+                number_of_payments bigint NOT NULL,
+                annual_percentage_rate decimal NOT NULL,
+                first_repayment_date timestamp NOT NULL,
+                response_id UUID,
+                PRIMARY KEY (offer_id)
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="202308311018" author="Bragin">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_response_customer"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_offer_response"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE responses ADD CONSTRAINT fk_response_customer FOREIGN KEY (customer_id) REFERENCES customers;
+            ALTER TABLE offers ADD CONSTRAINT fk_offer_response FOREIGN KEY (response_id) REFERENCES responses;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
