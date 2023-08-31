@@ -1,0 +1,35 @@
+<div class="form">
+  <input type="text" placeholder="Add name" [(ngModel)]="firstName"/>
+  <input type="text" placeholder="Add lastname" [(ngModel)]="lastName"/>
+  <input type="text" placeholder="Add phone number" [(ngModel)]="phoneNumber"/>
+  <input type="email" placeholder="Add email" [(ngModel)]="email"/>
+  <input type="number" placeholder="Add monthly income" [(ngModel)]="monthlyIncome"/>
+  <input type="number" placeholder="Add monthly expenses" [(ngModel)]="monthlyExpenses"/>
+  <select name="marriedStatus" [(ngModel)]="marriedStatus">
+    <option value="" selected disabled hidden>Choose type</option>
+    <option value="SINGLE">SINGLE</option>
+    <option value="MARRIED">MARRIED</option>
+    <option value="DIVORCED">DIVORCED</option>
+    <option value="COHABITING">COHABITING</option>
+  </select>
+  <input type="number" placeholder="How many do you have dependents?" [(ngModel)]="dependents"/>
+  <span>Are you agree to be scored?</span><input type="checkbox" placeholder="Are you agree to be scored?" [(ngModel)]="agreeToBeScored"/>
+  <input type="number" placeholder="Add amount" [(ngModel)]="amount"/>
+  <button (click)="save()">Apply</button>
+</div>
+<div *ngIf="aggregatorService.customer !== undefined">
+  <table id="status">
+    <tr>
+      <th>Bank</th>
+      <th>Status</th>
+      <th>Offer</th>
+    </tr>
+    <tr *ngFor="let response of aggregatorService.customer?.responseList">
+      <td>{{response.bank}}</td>
+      <td>{{response.status}}</td>
+      <td>{{convertOffer(response.offer)}}</td>
+    </tr>
+  </table>
+  <button (click)="update()">Update</button>
+</div>
+<div *ngIf="aggregatorService.customer === undefined"></div>

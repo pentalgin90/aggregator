@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  app:
+    image: aggregator:latest
+    build:
+      context: ../
+      dockerfile: ./env/Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      POSTGRES_URL: $POSTGRES_URL
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_SCHEMA: $POSTGRES_SCHEMA
+      FAST_BANK_URL: $FAST_BANK_URL
+      SOLID_BANK_URL: $SOLID_BANK_URL
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:14.1-alpine
+    container_name: db
+    restart: on-failure
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_SCHEMA: $POSTGRES_SCHEMA
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./database.sh:/docker-entrypoint-initdb.d/database.sh
+    healthcheck:
+      test: pg_isready -Upostgres
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  db: { }
