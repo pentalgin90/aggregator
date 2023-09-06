@@ -23,15 +23,15 @@ public class CheckerStatus {
     public void start() {
         List<ResponseEntity> responses = responseService.getAllResponse();
         if (!responses.isEmpty()) {
-            for (ResponseEntity response : responses) {
-                if (response.getStatus() == StatusResponse.DRAFT) {
-                    Response newResponse = switch (response.getBank()) {
-                        case SOLID -> solidBankService.retrieval(response.getResponseId());
-                        case FAST -> fastBankService.retrieval(response.getResponseId());
-                    };
-                    responseService.update(newResponse);
-                }
-            }
+            responses.stream()
+                    .filter(response -> response.getStatus() == StatusResponse.DRAFT)
+                    .forEach(response -> {
+                        Response newResponse = switch (response.getBank()) {
+                            case SOLID -> solidBankService.retrieval(response.getResponseId());
+                            case FAST -> fastBankService.retrieval(response.getResponseId());
+                        };
+                        responseService.update(newResponse);
+                    });
         }
     }
 }

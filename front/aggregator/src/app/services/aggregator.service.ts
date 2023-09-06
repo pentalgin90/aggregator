@@ -10,7 +10,7 @@ export interface Customer {
   email: string
   monthlyIncome: number
   monthlyExpenses: number
-  marriedStatus?: string
+  marriedStatus: string
   dependents?: number
   agreeToBeScored: boolean
   amount: number,
@@ -35,7 +35,6 @@ export interface Offer {
 export class AggregatorService {
   private url: string = 'http://localhost:8080/api/customers'
   public customer?: Customer
-  private loadStatus: boolean = true
 
   constructor(private http: HttpClient) {
   }

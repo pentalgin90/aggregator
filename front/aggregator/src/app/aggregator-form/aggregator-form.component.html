@@ -1,35 +1,79 @@
-<div class="form">
-  <input type="text" placeholder="Add name" [(ngModel)]="firstName"/>
-  <input type="text" placeholder="Add lastname" [(ngModel)]="lastName"/>
-  <input type="text" placeholder="Add phone number" [(ngModel)]="phoneNumber"/>
-  <input type="email" placeholder="Add email" [(ngModel)]="email"/>
-  <input type="number" placeholder="Add monthly income" [(ngModel)]="monthlyIncome"/>
-  <input type="number" placeholder="Add monthly expenses" [(ngModel)]="monthlyExpenses"/>
-  <select name="marriedStatus" [(ngModel)]="marriedStatus">
-    <option value="" selected disabled hidden>Choose type</option>
-    <option value="SINGLE">SINGLE</option>
-    <option value="MARRIED">MARRIED</option>
-    <option value="DIVORCED">DIVORCED</option>
-    <option value="COHABITING">COHABITING</option>
-  </select>
-  <input type="number" placeholder="How many do you have dependents?" [(ngModel)]="dependents"/>
-  <span>Are you agree to be scored?</span><input type="checkbox" placeholder="Are you agree to be scored?" [(ngModel)]="agreeToBeScored"/>
-  <input type="number" placeholder="Add amount" [(ngModel)]="amount"/>
-  <button (click)="save()">Apply</button>
-</div>
+<form>
+  <div class="form-group col-xl-3">
+    <label for="firstName">Add name</label>
+    <input type="text" class="form-control" id="firstName" [(ngModel)]="firstName"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3 col-xl-3">
+    <label for="lastName">Add lastname</label>
+    <input type="text" class="form-control" id="lastName" name="lastName" [(ngModel)]="lastName"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="phoneNumber">Add phone number</label>
+    <input type="text" class="form-control" id="phoneNumber" [(ngModel)]="phoneNumber"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="email">Add email</label>
+    <input type="email" class="form-control" id="email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="monthlyIncome">Add monthly income</label>
+    <input type="number" class="form-control" id="monthlyIncome" [(ngModel)]="monthlyIncome"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="monthlyExpenses">Add monthly expenses</label>
+    <input type="number" class="form-control" id="monthlyExpenses" [(ngModel)]="monthlyExpenses"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="marriedStatus">Choose married status</label>
+    <select class="form-control" id="marriedStatus" name="marriedStatus" [(ngModel)]="marriedStatus"
+            [ngModelOptions]="{standalone: true}">
+      <option value="" disabled></option>
+      <option value="SINGLE">SINGLE</option>
+      <option value="MARRIED">MARRIED</option>
+      <option value="DIVORCED">DIVORCED</option>
+      <option value="COHABITING">COHABITING</option>
+    </select>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="dependents">How many do you have dependents?</label>
+    <input class="form-control" id="dependents" type="number" [(ngModel)]="dependents"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3 form-check">
+    <label class="form-check-label" for="agreeToBeScored">Are you agree to be scored?</label>
+    <input type="checkbox" class="form-check-input" id="agreeToBeScored" [(ngModel)]="agreeToBeScored"
+           [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <div class="form-group col-xl-3">
+    <label for="amount">Add amount</label>
+    <input type="number" class="form-control" id="amount" [(ngModel)]="amount" [ngModelOptions]="{standalone: true}"/>
+  </div>
+  <button type="button" class="btn btn-outline-dark" (click)="save()">Apply</button>
+</form>
 <div *ngIf="aggregatorService.customer !== undefined">
-  <table id="status">
+  <table class="table table-striped" id="status">
+    <thead>
     <tr>
-      <th>Bank</th>
-      <th>Status</th>
-      <th>Offer</th>
+      <th scope="col">Bank</th>
+      <th scope="col">Status</th>
+      <th scope="col">Offer</th>
     </tr>
+    </thead>
+    <tbody>
     <tr *ngFor="let response of aggregatorService.customer?.responseList">
       <td>{{response.bank}}</td>
       <td>{{response.status}}</td>
-      <td>{{convertOffer(response.offer)}}</td>
+      <td>
+        <p>{{convertOffer(response.offer)}}</p>
+      </td>
     </tr>
+    </tbody>
   </table>
-  <button (click)="update()">Update</button>
+  <button type="button" class="btn btn-outline-dark" (click)="update()">Update</button>
 </div>
 <div *ngIf="aggregatorService.customer === undefined"></div>

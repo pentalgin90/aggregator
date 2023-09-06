@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OfferServiceImpl implements OfferService {
 
     private final OfferRepo offerRepo;
-
-    @Transactional
     @Override
     public OfferEntity save(OfferEntity offerEntity) {
         return offerRepo.save(offerEntity);

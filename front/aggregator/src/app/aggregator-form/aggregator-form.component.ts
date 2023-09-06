@@ -1,11 +1,13 @@
 import {Component, OnInit} from "@angular/core";
 import {AggregatorService, Customer, Offer} from "../services/aggregator.service";
+
 @Component({
   selector: 'app-aggregator-form',
   templateUrl: './aggregator-form.component.html',
   styleUrls: ['./aggregator-form.component.scss']
 })
 export class AggregatorFormComponent implements OnInit {
+  public isCollapsed = false;
 
   firstName: string = ''
   lastName: string = ''
@@ -17,7 +19,6 @@ export class AggregatorFormComponent implements OnInit {
   dependents: number = 0
   agreeToBeScored: boolean = false
   amount: number = 0
-
 
 
   constructor(public aggregatorService: AggregatorService) {
@@ -60,9 +61,14 @@ export class AggregatorFormComponent implements OnInit {
     this.amount = 0
   }
 
-  convertOffer(offer: Offer) : String {
-    return JSON.stringify(offer);
+  convertOffer(offer: Offer): String {
+    if (offer !== null && offer !== undefined) {
+      return "monthly payment amount: " + offer.monthlyPaymentAmount + "\n" +
+        "total repayment amount: " + offer.totalRepaymentAmount + "\n" +
+        "number of payments: " + offer.numberOfPayments + "\n" +
+        "annual percentage rate: " + offer.annualPercentageRate + "\n" +
+        "first repayment date: " + offer.firstRepaymentDate + "\n";
+    }
+    return "";
   }
-
-  protected readonly JSON = JSON;
 }

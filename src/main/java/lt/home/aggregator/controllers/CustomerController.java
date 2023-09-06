@@ -2,6 +2,7 @@ package lt.home.aggregator.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lt.home.aggregator.dto.Customer;
+import lt.home.aggregator.service.ApplicationService;
 import lt.home.aggregator.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+    private final ApplicationService applicationService;
 
     @PostMapping
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.createAnApplication(customer), HttpStatus.CREATED);
+        return new ResponseEntity<>(applicationService.createAnApplication(customer), HttpStatus.CREATED);
     }
 
     @GetMapping("{customerId}")

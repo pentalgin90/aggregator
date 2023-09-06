@@ -31,6 +31,6 @@ spring:
         size: 2
 financing-institutions:
   fast-bank:
-    url: ${FAST_BANK_URL}
+    url: ${FAST_BANK_URL:https://shop.stage.klix.app/api/FastBank/applications}
   solid-bank:
-    url: ${SOLID_BANK_URL}
+    url: ${SOLID_BANK_URL:https://shop.stage.klix.app/api/SolidBank/applications}
