@@ -32,6 +32,7 @@ public class ApplicationCustomerImpl implements ApplicationService {
                     financingService.makeRequest(customer);
                     return financingService.applyForLoan();
                 })
+                .filter(Objects::nonNull)
                 .toList();
         customer.getResponseList().addAll(responseList);
         Customer saved = customerService.save(customer);
