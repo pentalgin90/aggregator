@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getById(UUID customerId) {
         CustomerEntity byId = customerRepo.findById(customerId).orElse(null);
-        customerConverter.entityToDto(byId);
         return customerConverter.entityToDto(byId);
     }
 

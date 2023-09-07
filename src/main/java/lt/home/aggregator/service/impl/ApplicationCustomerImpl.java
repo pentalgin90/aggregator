@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,9 @@ public class ApplicationCustomerImpl implements ApplicationService {
                 .toList();
         customer.getResponseList().addAll(responseList);
         Customer saved = customerService.save(customer);
-        responseService.saveResponseList(responseList, saved.getCustomerId());
+        if (!responseList.isEmpty()) {
+            responseService.saveResponseList(responseList, saved.getCustomerId());
+        }
         return saved;
     }
 }

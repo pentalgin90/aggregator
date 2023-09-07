@@ -2,7 +2,6 @@ package lt.home.aggregator.service.schedulers;
 
 import lombok.RequiredArgsConstructor;
 import lt.home.aggregator.dto.interaction.Response;
-import lt.home.aggregator.dto.interaction.StatusResponse;
 import lt.home.aggregator.entities.ResponseEntity;
 import lt.home.aggregator.service.ResponseService;
 import lt.home.aggregator.service.impl.FastBankService;
@@ -19,13 +18,11 @@ public class CheckerStatus {
     private final SolidBankService solidBankService;
     private final ResponseService responseService;
 
-    @Scheduled(fixedDelay = 5_000)
+    @Scheduled(fixedDelay = 1_000)
     public void start() {
-        List<ResponseEntity> responses = responseService.getAllResponse();
+        List<ResponseEntity> responses = responseService.getAllResponseDraft();
         if (!responses.isEmpty()) {
-            responses.stream()
-                    .filter(response -> response.getStatus() == StatusResponse.DRAFT)
-                    .forEach(response -> {
+            responses.forEach(response -> {
                         Response newResponse = switch (response.getBank()) {
                             case SOLID -> solidBankService.retrieval(response.getResponseId());
                             case FAST -> fastBankService.retrieval(response.getResponseId());

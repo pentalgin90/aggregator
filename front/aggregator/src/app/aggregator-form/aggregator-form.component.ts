@@ -7,7 +7,6 @@ import {AggregatorService, Customer, Offer} from "../services/aggregator.service
   styleUrls: ['./aggregator-form.component.scss']
 })
 export class AggregatorFormComponent implements OnInit {
-  public isCollapsed = false;
 
   firstName: string = ''
   lastName: string = ''

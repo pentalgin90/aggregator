@@ -31,12 +31,17 @@ public class ResponseServiceImpl implements ResponseService {
     @Transactional
     public void saveResponseList(List<Response> responseList, UUID customerId) {
         Optional<CustomerEntity> optionalCustomer = customerRepo.findById(customerId);
-        optionalCustomer.ifPresent(customerEntity -> responseList.stream()
-                .map(responseConverter::dtoToEntity)
-                .forEach(response -> {
-                    response.setCustomerEntity(customerEntity);
-                    responseRepo.save(response);
-                }));
+        optionalCustomer.ifPresentOrElse(
+                customerEntity -> responseList.stream()
+                        .map(responseConverter::dtoToEntity)
+                        .forEach(response -> {
+                            response.setCustomerEntity(customerEntity);
+                            responseRepo.save(response);
+                        }),
+                () -> {
+                    throw new RuntimeException("Customer with is not exist");
+                }
+        );
     }
 
     @Override
@@ -44,21 +49,24 @@ public class ResponseServiceImpl implements ResponseService {
     public void update(Response response) {
         ResponseEntity newResponseEntity = responseConverter.dtoToEntity(response);
         Optional<ResponseEntity> responseEntityOptional = responseRepo.findById(newResponseEntity.getResponseId());
-        responseEntityOptional.ifPresent(responseEntity -> {
-            OfferEntity offer = newResponseEntity.getOfferEntity();
-            OfferEntity offerEntity = null;
-            if (Objects.nonNull(offer)) {
-                offer.setResponseEntity(responseEntity);
-                offerEntity = offerService.save(offer);
-            }
-            responseEntity.setStatus(newResponseEntity.getStatus());
-            responseEntity.setOfferEntity(offerEntity);
-            responseRepo.save(responseEntity);
-        });
+        responseEntityOptional.ifPresentOrElse(responseEntity -> {
+                    OfferEntity offer = newResponseEntity.getOfferEntity();
+                    OfferEntity offerEntity = null;
+                    if (Objects.nonNull(offer)) {
+                        offer.setResponseEntity(responseEntity);
+                        offerEntity = offerService.save(offer);
+                    }
+                    responseEntity.setStatus(newResponseEntity.getStatus());
+                    responseEntity.setOfferEntity(offerEntity);
+                    responseRepo.save(responseEntity);
+                },
+                () -> {
+                    throw new RuntimeException("Response is not exist");
+                });
     }
 
     @Override
-    public List<ResponseEntity> getAllResponse() {
-        return responseRepo.findAll();
+    public List<ResponseEntity> getAllResponseDraft() {
+        return responseRepo.findAllStatusDraft();
     }
 }
